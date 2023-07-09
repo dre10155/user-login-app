@@ -1,30 +1,27 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import { onMounted } from "vue";
+import pocketbase  from "pocketbase";
+
+let pb = null;
+onMounted(async() => {
+  pb = new pocketbase("http://127.0.0.1:8090");
+
+ const authData = await pb.collection('users').authWithPassword('dre10155', 'password');
+  // after the above you can also access the auth data from the authStore
+console.log('Is user authenticated:',pb.authStore.isValid);
+console.log('User Token:',pb.authStore.token);
+console.log(pb.authStore.model?.id);
+
+// "logout" the last authenticated model
+pb.authStore.clear();
+});
 </script>
 
 <template>
   <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+    <h1>Hello World</h1>
   </div>
   <HelloWorld msg="Vite + Vue" />
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+<style scoped></style>
